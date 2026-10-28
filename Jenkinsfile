@@ -1,3 +1,4 @@
+
 pipeline {
     agent any
 
@@ -28,10 +29,20 @@ pipeline {
                         variable: 'DOCKER_PAT'
                     )
                 ]) {
-                    bat '''
-                        @echo off
-                        echo %DOCKER_PAT% | docker login -u amruthakm02 --password-stdin
-                        if errorlevel 1 exit /b 1
+                    powershell '''
+                        if ([string]::IsNullOrWhiteSpace($env:DOCKER_PAT)) {
+                            Write-Output "Docker token is EMPTY."
+                            exit 1
+                        }
+
+                        Write-Output "Docker token is available."
+
+                        $env:DOCKER_PAT |
+                            docker login -u amruthakm02 --password-stdin
+
+                        if ($LASTEXITCODE -ne 0) {
+                            exit 1
+                        }
                     '''
                 }
             }
