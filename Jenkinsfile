@@ -30,7 +30,7 @@ pipeline {
                 ]) {
                     bat '''
                         @echo off
-                        echo %DOCKER_PAT% | docker login -u your-dockerhub-username --password-stdin
+                        echo %DOCKER_PAT% | docker login -u amruthakm02 --password-stdin
                         if errorlevel 1 exit /b 1
                     '''
                 }
